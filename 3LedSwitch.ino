@@ -31,34 +31,22 @@ void loop() {
     ledCount ++;
   }
 
-  else if (elapsed > 5000) {
-    reset();
-  }
+
   checkLights();
   lastButton = currentButton;
-}
 
-
-void reset() {
-  turnOff(led1); turnOff(led2); turnOff(led3);
-  ledCount = 0;
 }
 
 void checkLights() {
-  if (ledCount > 3 || elapsed >= 1000) {
-    reset();
-    return;
-
-  }
-  switch (ledCount) {
+  switch (ledCount % 4) {
+    
+    case 0:
+      turnOff(led1); turnOff(led2); turnOff(led3);
+      Serial.println(true);
     case 1:
       turnOn(led1);
-      turnOff(led2); turnOff(led3);
-      
-      Serial.println(true);
     case 2:
       turnOn(led2);
-      turnOff(led3);
     case 3:
       turnOn(led3);
   }
@@ -79,7 +67,7 @@ boolean buttonPressed() {
 
   //if there is a change and button is currently pressed
 
-  if (currentButton != lastButton && currentButton) {
+  if (currentButton != lastButton && currentButton)   {
     checkElapsed();
     lastTime = currentTime;
     return true;
