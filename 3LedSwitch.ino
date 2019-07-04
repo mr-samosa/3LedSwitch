@@ -1,203 +1,51 @@
-int switchPin = 10;
-int led1 = 2;
-int led2 = 3;
-int led3 = 4;
-boolean currentButton = false;
-boolean lastButton = false;
+/*
+  Button
 
-boolean led1On = false;
-boolean led2On = false;
-boolean led3On = false;
-boolean led4On = false;
+  Turns on and off a light emitting diode(LED) connected to digital pin 13,
+  when pressing a pushbutton attached to pin 2.
 
-int ledCount = 0;
+  The circuit:
+  - LED attached from pin 13 to ground
+  - pushbutton attached to pin 2 from +5V
+  - 10K resistor attached to pin 2 from ground
 
-long lastTime = 0;
-long currentTime = 0;
-long elapsed = 0;
+  - Note: on most Arduinos there is already an LED on the board
+    attached to pin 13.
+
+  created 2005
+  by DojoDave <http://www.0j0.org>
+  modified 30 Aug 2011
+  by Tom Igoe
+
+  This example code is in the public domain.
+
+  http://www.arduino.cc/en/Tutorial/Button
+*/
+
+// constants won't change. They're used here to set pin numbers:
+const int buttonPin = 2;     // the number of the pushbutton pin
+const int ledPin =  13;      // the number of the LED pin
+
+// variables will change:
+int buttonState = 0;         // variable for reading the pushbutton status
 
 void setup() {
-  pinMode(switchPin, INPUT);
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
-  pinMode(led3, OUTPUT);
-  Serial.begin(9600);
-
+  // initialize the LED pin as an output:
+  pinMode(ledPin, OUTPUT);
+  // initialize the pushbutton pin as an input:
+  pinMode(buttonPin, INPUT);
 }
 
 void loop() {
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(buttonPin);
 
-  if (buttonPressed() && elapsed < 1000) {
-    ledCount ++;
+  // check if the pushbutton is pressed. If it is, the buttonState is HIGH:
+  if (buttonState == HIGH) {
+    // turn LED on:
+    digitalWrite(ledPin, HIGH);
+  } else {
+    // turn LED off:
+    digitalWrite(ledPin, LOW);
   }
-
-
-  checkLights();
-  lastButton = currentButton;
-
 }
-
-void checkLights() {
-  switch (ledCount % 4) {
-    
-    case 0:
-      turnOff(led1); turnOff(led2); turnOff(led3);
-      Serial.println(true);
-    case 1:
-      turnOn(led1);
-    case 2:
-      turnOn(led2);
-    case 3:
-      turnOn(led3);
-  }
-
-
-}
-
-void checkElapsed() {
-
-  currentTime = millis();
-  elapsed = currentTime - lastTime;
-
-}
-
-boolean buttonPressed() {
-  //retrieves proper value for button press
-  currentButton = debounce(lastButton);
-
-  //if there is a change and button is currently pressed
-
-  if (currentButton != lastButton && currentButton)   {
-    checkElapsed();
-    lastTime = currentTime;
-    return true;
-  }
-  else {
-    return false;
-  }
-
-
-}
-
-void turnOff(int n) {
-  digitalWrite(n, LOW);
-}
-void turnOn(int n) {
-  digitalWrite(n, HIGH);
-}
-
-
-boolean debounce(boolean last) {
-  boolean current = digitalRead(switchPin);
-  if (current != last) {
-    delay(5);
-    current = digitalRead(switchPin);
-  }
-  return current;
-
-}
-
-int switchPin = 10;
-int led1 = 2;
-int led2 = 3;
-int led3 = 4;
-boolean currentButton = false;
-boolean lastButton = false;
-
-boolean led1On = false;
-boolean led2On = false;
-boolean led3On = false;
-boolean led4On = false;
-
-int ledCount = 0;
-
-long lastTime = 0;
-long currentTime = 0;
-long elapsed = 0;
-
-void setup() {
-  pinMode(switchPin, INPUT);
-  pinMode(led1, OUTPUT);
-  pinMode(led2, OUTPUT);
-  pinMode(led3, OUTPUT);
-  Serial.begin(9600);
-
-}
-
-void loop() {
-
-  if (buttonPressed() && elapsed < 1000) {
-    ledCount ++;
-    checkLights();
-  }
-  else if (elapsed > 5000){
-    checkLights();
-  }
-
-  lastButton = currentButton;,
-}
-
-//
-void checkLights() {
-  if (ledCount > 3 || elapsed >= 1000) {
-    turnOff(led1); turnOff(led2); turnOff(led3);
-    ledCount = 0;
-    return;
-
-  }
-
-  switch (ledCount) {
-    case 1:
-      turnOn(led1);
-    case 2:
-      turnOn(led2);
-    case 3:
-      turnOn(led3);
-  }
-
-}
-
-void checkElapsed() {
-
-  currentTime = millis();
-  elapsed = currentTime - lastTime;
-
-}
-
-boolean buttonPressed() {
-  //retrieves proper value for button press
-  currentButton = debounce(lastButton);
-
-  //if there is a change and button is currently pressed
-
-  if (currentButton != lastButton && currentButton) {
-    checkElapsed();
-    lastTime = currentTime;
-    return true;
-  }
-  else {
-    return false;
-  }
-
-
-}
-
-void turnOff(int n) {
-  digitalWrite(n, LOW);
-}
-void turnOn(int n) {
-  digitalWrite(n, HIGH);
-}
-
-
-boolean debounce(boolean last) {
-  boolean current = digitalRead(switchPin);
-  if (current != last) {
-    delay(5);
-    current = digitalRead(switchPin);
-  }
-  Serial.println(current);
-  return current;
-
-}
-
